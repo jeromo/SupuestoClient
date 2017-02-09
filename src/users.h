@@ -15,10 +15,12 @@ private:
     const int min_identifier = 1;
     vector<int> vectorIdentifiers;
 
+    int extractIdentifier(unsigned position);
+
 public:
     Users();
-    int getIdentifier (unsigned position);
-    string createUserName();
+    int extractRandIdentifier();
+    string createName();
 };
 
 #endif // USERS_H
