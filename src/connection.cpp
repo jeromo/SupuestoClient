@@ -10,11 +10,15 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
+#include <users.h>
 
 
 
-Connection::Connection()
+Connection::Connection(QString ipAddress, int port)
 {
+    serverName = ipAddress;
+    serverPort = port;
+
     socket.connectToHost(serverName, serverPort);
 
     if (!socket.waitForConnected(Timeout)) {
@@ -39,7 +43,6 @@ QString Connection::read()
 
         in.startTransaction();
         in >> data;
-        std::cout << data.toStdString() <<std::flush;
 
     } while (!in.commitTransaction());
 
@@ -58,12 +61,19 @@ void Connection::write(QString data)
 
 void Connection::runCommunication()
 {
+    Users users;
+    int identifier;
 
+    QString response;
 
-        while (1) {
+    while ((identifier = users.extractRandIdentifier()) != -1) {
+        QString data = QString::fromStdString(std::to_string(identifier)) +":" + QString::fromStdString(users.createName());
+        clock_t start = clock();
 
-            QString fortune;
-
-            read();
-        }
+        write (data);
+        response = read();
+        clock_t end = clock();
+        std::cout << response.toStdString() << " Duration " << end - start << std::endl << std::flush;
+        sleep(1);
+    }
 }

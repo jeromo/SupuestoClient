@@ -10,15 +10,15 @@ class Connection: public QObject
     Q_OBJECT
 private:
     QTcpSocket socket;
-    QString serverName = "192.168.2.1";
-    quint16 serverPort = 46820;
+    QString serverName;
+    quint16 serverPort;
     const int Timeout = 5 * 1000;
 
     QString read();
     void write(QString data);
 
 public:
-    explicit Connection();
+    explicit Connection(QString ipAddress, int port);
     void runCommunication();
 
 };
